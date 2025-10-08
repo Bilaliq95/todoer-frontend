@@ -1,8 +1,12 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { useNavigate } from 'react-router-dom';
+import LogoutButton from "./LogoutButton";
+import LoadingScreen from "./LoadingScreen";
+
 
 
 const Home=(props)=>{
+    const { userData, setTaskData} = props;
     const navigate = useNavigate();
     const [taskValue,setTaskValue]=useState(''); //This is the value of the input box
     const handleAddedTask=()=>{
@@ -10,6 +14,7 @@ const Home=(props)=>{
         setTaskValue('');
         fetch(`http://localhost:3004/tasks/`, {
             method: "POST",
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -38,6 +43,7 @@ const Home=(props)=>{
             setTaskValue('');
             fetch(`http://localhost:3004/tasks/${selectedTask.task_id}`, {
                 method: "PUT",
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -47,15 +53,38 @@ const Home=(props)=>{
             })
         }
 
+    useEffect(() => {
+        console.log(userData?.user_id);
+        if (!userData?.user_id) return;
+
+        fetch(`http://localhost:3004/tasks/user/${userData.user_id}`, {
+            method: "GET",
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.json())
+            .then((data) => {
+
+                console.log(data);
+                if (!data.tasks) {
+                    setTaskData([]);
+                } else {
+
+                    setTaskData(data.tasks);
+                }
+            });
+    }, [userData?.user_id, setTaskData]);
 
 
     return(
 
         <div className="bg-gray-900 min-h-screen">
-
+            {(userData?.user_id)?<>
             <div className="flex flex-col text-white items-center w-full">
                 <h2 className="m-3 font-bold p-5">Welcome {props.userData.name}!</h2>
-
+                <LogoutButton setIsLoggedIn={props.setIsLoggedIn}/>
                 <input onChange={(e) => {
                     setTaskValue(e.target.value);
                 }} value={taskValue} className=" w-1/2 p-3 text-black"/>
@@ -103,8 +132,7 @@ const Home=(props)=>{
                         </tbody>
 
                     </table> : <div className="text italic">No tasks found</div>}
-            </div>
-
+            </div></>:<LoadingScreen/>}
         </div>
 
     )

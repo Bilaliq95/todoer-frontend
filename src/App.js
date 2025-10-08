@@ -3,16 +3,56 @@ import Home from './components/Home';
 import CompletedTasks from './components/CompletedTasks';
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import './App.css';
-import { useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import LoadingScreen from "./components/LoadingScreen";
+
+
 
 
 function App() {
   const [userData, setUserData] = useState({});
   const [taskData, setTaskData] = useState([]);
   const [IsLoggedIn, setIsLoggedIn] = useState(undefined);
-  // null = checking, true = logged in, false = not logged in
-  console.log(IsLoggedIn);
+  // undefined = checking, true = logged in, false = not logged in
+
+
+    const checkTokens = useCallback((retried = false) => {
+
+
+        fetch('http://localhost:3002/users/validate', {
+            method: 'POST',
+            credentials: 'include',
+        })
+            .then(async (res) => {
+                if (res.ok) {
+                    const data = await res.json(); // { user: {...} }
+                    //This is setting user data state and that state is being used
+                    setUserData(data.user);
+                    setIsLoggedIn(true);
+                    return;
+                }
+
+                if (res.status === 401) {
+                    const r = await fetch('http://localhost:3002/users/refresh', {
+                        method: 'POST',
+                        credentials: 'include',
+                    });
+                    if (r.ok && !retried) {
+                        return checkTokens(true); // retry once after refresh
+                    }
+                }
+
+                setIsLoggedIn(false);
+            })
+            .catch(() => {
+                setIsLoggedIn(false);
+            });
+    }, [ setIsLoggedIn, setUserData]);
+
+    useEffect(() => {
+        checkTokens();
+    }, [checkTokens]);
+
   return (
       <BrowserRouter>
         <Routes>
@@ -31,10 +71,10 @@ function App() {
               path="/home"
               element={
                 IsLoggedIn === true
-                    ? <Home userData={userData} setTaskData={setTaskData} taskData={taskData} />
+                    ? <Home  setIsLoggedIn={setIsLoggedIn} userData={userData} setTaskData={setTaskData} taskData={taskData} />
                     : IsLoggedIn === false
                         ? <Navigate to="/login" />
-                        : <LoadingScreen setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />
+                        : <LoadingScreen  setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />
               }
           />
 
@@ -46,14 +86,14 @@ function App() {
                     ? <CompletedTasks taskData={taskData} setTaskData={setTaskData} />
                     : IsLoggedIn === false
                         ? <Navigate to="/login" />
-                        : <LoadingScreen setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />
+                        : <LoadingScreen  setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />
               }
           />
 
           {/* Root route → Loading check */}
           <Route
               path="/"
-              element={<LoadingScreen setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />}
+              element={<LoadingScreen  setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />}
           />
         </Routes>
       </BrowserRouter>

@@ -27,24 +27,9 @@ const Login = (props) => {
         }).then(response => response.json()).then((data)=>{
             if(data.user)
             {
+                props.setIsLoggedIn(true);
                 props.setUserData(data.user);
-                fetch(`http://localhost:3004/tasks/user/${data.user.user_id}`, {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                }).then(response => response.json()).then((data)=>{
-                    if(!data.tasks)
-                    {
-                        props.setTaskData([]);
-                    }
-                    else{
-                        props.setTaskData(data.tasks);
-                    }
                     navigate("/home");
-                })
-
-
             }
         })
 
