@@ -43,10 +43,10 @@ const Login = (props) => {
         >
             <div className="w-full max-w-md bg-slate-700 sm:p-6 md:p-10 lg:p-10 ">
                 <form onSubmit={handleFormSubmit}>
-                    <label className="form-elements" htmlFor="email">Email</label>
-                    <input onChange={handleEmailChange} className="text-black form-elements" value={email} type="email" id="email" name="email"/>
-                    <label className="form-elements" htmlFor="password">Password</label>
-                    <input onChange={handlePasswordChange} className="text-black form-elements" value={password} type="password" id="password" name="password"/>
+                    <label className="pt-3 text-center form-elements" htmlFor="email">Email</label>
+                    <input onChange={handleEmailChange} className=" h-8 text-black form-elements" value={email} type="email" id="email" name="email"/>
+                    <label className="pt-3 text-center form-elements" htmlFor="password">Password</label>
+                    <input onChange={handlePasswordChange} className="h-8 text-black form-elements" value={password} type="password" id="password" name="password"/>
                     <div className=" flex items-center justify-center m-5">
                         <button className="bg-fuchsia-50 p-1">Login</button>
                     </div>

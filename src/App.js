@@ -5,6 +5,7 @@ import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import './App.css';
 import {useCallback, useEffect, useState} from "react";
 import LoadingScreen from "./components/LoadingScreen";
+import Register from "./components/Register";
 
 
 
@@ -56,6 +57,15 @@ function App() {
   return (
       <BrowserRouter>
         <Routes>
+            {/* Register route */}
+            <Route
+                path="/register"
+                element={
+                    IsLoggedIn === true
+                        ? <Navigate to="/home" />
+                        : <Register />
+                }
+            />
           {/* Login route */}
           <Route
               path="/login"
