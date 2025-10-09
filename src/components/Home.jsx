@@ -88,8 +88,6 @@ const Home=(props)=>{
                 <input onChange={(e) => {
                     setTaskValue(e.target.value);
                 }} value={taskValue} className=" w-1/2 p-3 text-black"/>
-
-
                 <button onClick={handleAddedTask} className="p-3 m-3 rounded-full bg-slate-600">Add Task</button>
             </div>
             <div className="w-full flex justify-end">
@@ -108,14 +106,14 @@ const Home=(props)=>{
 
                             <th className=" p-4 text-white border ">Task</th>
                             <th className="  text-white border ">Date Created</th>
-                            <th className=" p-4 text-white border ">Mark Completed</th>
+                            <th className="w-1 p-4 text-white border ">Mark Completed</th>
                         </tr>
                         </thead>
                         <tbody>
                         {[...props.taskData].filter((item) => !item.completed).sort((a, b) => a.date_created.localeCompare(b.date_created)).map(task => (
                             <tr key={task.task_id}>
-                                <td className="p-4 text-white border">{task.description}</td>
-                                <td className="p-2 text-white border">{new Date(task.date_created).toLocaleString()}</td>
+                                <td className="text-white text-center border">{task.description}</td>
+                                <td className=" text-white text-center border">{new Date(task.date_created).toLocaleString()}</td>
                                 <td className="flex justify-center"><input
                                     id={task.task_id}
                                     type="checkbox"
