@@ -28,7 +28,7 @@ const CompletedTasks = (props) => {
     return(
     <div className=" bg-gray-900 min-h-screen text-white flex flex-col items-center ">
         <h2 className="font-bold p-5">Your Completed Tasks:</h2>
-        {props.taskData && props.taskData.length !== 0 ?
+        {props.taskData.some(t => t.completed === true)?
             <table className="w-4/6 border-separate border-spacing-2 border ">
                 <thead>
                 <tr>

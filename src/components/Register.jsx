@@ -7,8 +7,12 @@ const Register = (props) => {
     const[password,setPassword] = useState("");
     const [name, setName]=useState("");
     const [phone_number, setPhone_Number]=useState("");
+    const [userStatusCheck,setUserStatusCheck]=useState(false);
     const navigate = useNavigate();
     const handleEmailChange = (e) => {
+        if(userStatusCheck){
+            setUserStatusCheck(!userStatusCheck);
+        }
         setEmail(e.target.value);
     }
 
@@ -34,11 +38,20 @@ const Register = (props) => {
             },
             body: JSON.stringify({name:name,email: email, password: password, phone_number:phone_number})
         }).then(response => {
+            console.log(response);
             if (response.ok) {
+                setUserStatusCheck(false);
                 navigate("/login");
             }
+            else if (response.status === 400 || response.status === 409)
+                {
+                    setUserStatusCheck(true);
+                }
+            else{
+                setUserStatusCheck(false);
+            }
         })
-    }
+    };
     return (
         <div
             style={{backgroundImage: "url('/background.jpg')"}}
@@ -49,13 +62,14 @@ const Register = (props) => {
                     <label className="pt-3 text-center form-elements" htmlFor="name">Name</label>
                     <input onChange={handleNameChange} className="h-8 text-black form-elements" type="text" id="name" name="name"/>
                     <label className="pt-3 text-center form-elements" htmlFor="email">Email</label>
+                    {userStatusCheck && <label className="pt-3 text-center form-elements">Email Already Exists</label>}
                     <input onChange={handleEmailChange} className="h-8 text-black form-elements" type="email" id="email" name="email"/>
                     <label className="pt-3 text-center form-elements" htmlFor="password">Password</label>
                     <input onChange={handlePasswordChange} className="h-8 text-black form-elements" type="password" id="password" name="password"/>
                     <label className="pt-3 text-center form-elements" htmlFor="phone_number">Phone</label>
                     <input onChange={handlePhoneNumberChange} className="h-8 text-black form-elements" type="text" id="phone_number" name="phone_number"/>
                     <div className=" flex items-center justify-center m-5">
-                        <button className="bg-fuchsia-50 p-1">Register</button>
+                        <button className="p-3 text-white rounded-full bg-slate-600">Register</button>
                     </div>
                 </form>
             </div>

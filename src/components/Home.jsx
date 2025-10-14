@@ -9,6 +9,26 @@ const Home=(props)=>{
     const { userData, setTaskData} = props;
     const navigate = useNavigate();
     const [taskValue,setTaskValue]=useState(''); //This is the value of the input box
+
+    const handleDeleteTask=(e)=>{
+        const selectedTask=props.taskData.find((item)=>{
+            return item.task_id===e.target.id
+        })
+        const updatedTasks=props.taskData.filter((item)=>(item.task_id!==e.target.id));
+        console.log(updatedTasks);
+        props.setTaskData(updatedTasks);
+
+        fetch(`http://localhost:3004/tasks/${selectedTask.task_id}`, {
+            method: "DELETE",
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }).then(response => response.json()).then((data)=>{
+            console.log(data);
+        })
+
+    }
     const handleAddedTask=()=>{
         const description=taskValue;
         setTaskValue('');
@@ -98,14 +118,15 @@ const Home=(props)=>{
             </div>
 
             <div className=" text-white flex flex-col items-center justify-center">
-                <h2 className="font-bold p-2">Your tasks:</h2>
+                <h2 className="font-bold text-3xl p-2">Your Tasks:</h2>
                 {props.taskData && props.taskData.length !== 0 ?
                     <table className="w-4/6 border-separate border-spacing-2 border ">
                         <thead>
                         <tr>
 
                             <th className=" p-4 text-white border ">Task</th>
-                            <th className="  text-white border ">Date Created</th>
+                            <th className="w-3 p-6 text-white border ">Date Created</th>
+                            <th className="w-2 p-2 text-white border ">Action</th>
                             <th className="w-1 p-4 text-white border ">Mark Completed</th>
                         </tr>
                         </thead>
@@ -114,6 +135,7 @@ const Home=(props)=>{
                             <tr key={task.task_id}>
                                 <td className="text-white text-center border">{task.description}</td>
                                 <td className=" text-white text-center border">{new Date(task.date_created).toLocaleString()}</td>
+                                <td className=" text-white text-center"><button id={task.task_id} onClick={handleDeleteTask} className="p-2 rounded-full bg-slate-600">Delete</button></td>
                                 <td className="flex justify-center"><input
                                     id={task.task_id}
                                     type="checkbox"
