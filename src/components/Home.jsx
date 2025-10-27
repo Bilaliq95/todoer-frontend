@@ -15,7 +15,6 @@ const Home=(props)=>{
             return item.task_id===e.target.id
         })
         const updatedTasks=props.taskData.filter((item)=>(item.task_id!==e.target.id));
-        console.log(updatedTasks);
         props.setTaskData(updatedTasks);
 
         fetch(`http://localhost:3004/tasks/${selectedTask.task_id}`, {
@@ -59,7 +58,6 @@ const Home=(props)=>{
                     return item.task_id===e.target.id
                 })
             props.setTaskData(updatedTasks);
-            console.log(selectedTask);
             setTaskValue('');
             fetch(`http://localhost:3004/tasks/${selectedTask.task_id}`, {
                 method: "PUT",
@@ -74,9 +72,7 @@ const Home=(props)=>{
         }
 
     useEffect(() => {
-        console.log(userData?.user_id);
         if (!userData?.user_id) return;
-
         fetch(`http://localhost:3004/tasks/user/${userData.user_id}`, {
             method: "GET",
             credentials: 'include',
@@ -86,12 +82,9 @@ const Home=(props)=>{
         })
             .then(response => response.json())
             .then((data) => {
-
-                console.log(data);
                 if (!data.tasks) {
                     setTaskData([]);
                 } else {
-
                     setTaskData(data.tasks);
                 }
             });

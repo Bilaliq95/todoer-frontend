@@ -23,6 +23,7 @@ const CompletedTasks = (props) => {
             body: JSON.stringify(selectedTask)
         }).then(response => response.json()).then((data)=>{
             console.log(data);
+
         })
     }
     return(

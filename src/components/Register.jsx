@@ -38,7 +38,6 @@ const Register = (props) => {
             },
             body: JSON.stringify({name:name,email: email, password: password, phone_number:phone_number})
         }).then(response => {
-            console.log(response);
             if (response.ok) {
                 setUserStatusCheck(false);
                 navigate("/login");
