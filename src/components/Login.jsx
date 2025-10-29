@@ -24,7 +24,7 @@ const Login = (props) => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         setCredentialsCheck(true);
-        fetch("http://localhost:3002/users/login", {
+        fetch("https://user-service-br5f.onrender.com/users/login", {
             method: "POST",
             credentials: 'include',
             headers: {

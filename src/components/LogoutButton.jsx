@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 const LogoutButton = (props) => {
     const navigate = useNavigate();
     const handleLogout = async () => {
-        const response = await fetch("http://localhost:3002/users/logout", {
+        const response = await fetch("https://user-service-br5f.onrender.com/users/logout", {
             method: "POST",
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' }

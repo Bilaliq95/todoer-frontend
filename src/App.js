@@ -20,7 +20,7 @@ function App() {
     const checkTokens = useCallback((retried = false) => {
 
 
-        fetch('http://localhost:3002/users/validate', {
+        fetch('https://user-service-br5f.onrender.com/users/validate', {
             method: 'POST',
             credentials: 'include',
         })
@@ -34,7 +34,7 @@ function App() {
                 }
 
                 if (res.status === 401) {
-                    const r = await fetch('http://localhost:3002/users/refresh', {
+                    const r = await fetch('https://user-service-br5f.onrender.com/users/refresh', {
                         method: 'POST',
                         credentials: 'include',
                     });

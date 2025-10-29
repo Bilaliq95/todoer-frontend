@@ -15,7 +15,7 @@ const CompletedTasks = (props) => {
             return item.task_id===e.target.id
         })
         props.setTaskData(updatedTasks);
-        fetch(`http://localhost:3004/tasks/${selectedTask.task_id}`, {
+        fetch(`https://todoer-backend-9xwq.onrender.com/tasks/${selectedTask.task_id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'

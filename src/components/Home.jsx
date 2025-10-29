@@ -17,7 +17,7 @@ const Home=(props)=>{
         const updatedTasks=props.taskData.filter((item)=>(item.task_id!==e.target.id));
         props.setTaskData(updatedTasks);
 
-        fetch(`http://localhost:3004/tasks/${selectedTask.task_id}`, {
+        fetch(`https://todoer-backend-9xwq.onrender.com/tasks/${selectedTask.task_id}`, {
             method: "DELETE",
             credentials: 'include',
             headers: {
@@ -31,7 +31,7 @@ const Home=(props)=>{
     const handleAddedTask=()=>{
         const description=taskValue;
         setTaskValue('');
-        fetch(`http://localhost:3004/tasks/`, {
+        fetch(`https://todoer-backend-9xwq.onrender.com/tasks/`, {
             method: "POST",
             credentials: 'include',
             headers: {
@@ -59,7 +59,7 @@ const Home=(props)=>{
                 })
             props.setTaskData(updatedTasks);
             setTaskValue('');
-            fetch(`http://localhost:3004/tasks/${selectedTask.task_id}`, {
+            fetch(`https://todoer-backend-9xwq.onrender.com/tasks/${selectedTask.task_id}`, {
                 method: "PUT",
                 credentials: 'include',
                 headers: {
@@ -72,8 +72,10 @@ const Home=(props)=>{
         }
 
     useEffect(() => {
+
         if (!userData?.user_id) return;
-        fetch(`http://localhost:3004/tasks/user/${userData.user_id}`, {
+
+        fetch(`https://todoer-backend-9xwq.onrender.com/tasks/user/${userData.user_id}`, {
             method: "GET",
             credentials: 'include',
             headers: {
@@ -82,9 +84,12 @@ const Home=(props)=>{
         })
             .then(response => response.json())
             .then((data) => {
+
+                console.log(data);
                 if (!data.tasks) {
                     setTaskData([]);
                 } else {
+
                     setTaskData(data.tasks);
                 }
             });

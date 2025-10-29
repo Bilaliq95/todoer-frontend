@@ -29,7 +29,7 @@ const Register = (props) => {
     }
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        fetch("http://localhost:3002/users/register", {
+        fetch("https://user-service-br5f.onrender.com/users/register", {
             method: "POST",
             credentials: 'include',
             headers: {
