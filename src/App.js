@@ -56,57 +56,86 @@ function App() {
 
   return (
       <BrowserRouter>
-        <Routes>
-            {/* Register route */}
-            <Route
-                path="/register"
-                element={
-                    IsLoggedIn === true
-                        ? <Navigate to="/home" />
-                        : <Register />
-                }
-            />
-          {/* Login route */}
-          <Route
-              path="/login"
-              element={
-                IsLoggedIn === true
-                    ? <Navigate to="/home" />
-                    : <Login setUserData={setUserData} setTaskData={setTaskData} setIsLoggedIn={setIsLoggedIn} />
-              }
-          />
+          <Routes>
+              {/* Register route */}
+              <Route
+                  path="/register"
+                  element={
+                      IsLoggedIn === true
+                          ? <Navigate to="/home" />
+                          : <Register />
+                  }
+              />
 
-          {/* Home (protected) */}
-          <Route
-              path="/home"
-              element={
-                IsLoggedIn === true
-                    ? <Home  setIsLoggedIn={setIsLoggedIn} userData={userData} setTaskData={setTaskData} taskData={taskData} />
-                    : IsLoggedIn === false
-                        ? <Navigate to="/login" />
-                        : <LoadingScreen  setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />
-              }
-          />
+              {/* Login route */}
+              <Route
+                  path="/login"
+                  element={
+                      IsLoggedIn === true
+                          ? <Navigate to="/home" />
+                          : <Login
+                              setUserData={setUserData}
+                              setTaskData={setTaskData}
+                              setIsLoggedIn={setIsLoggedIn}
+                          />
+                  }
+              />
 
-          {/* Completed Tasks (protected) */}
-          <Route
-              path="/completed-tasks"
-              element={
-                IsLoggedIn === true
-                    ? <CompletedTasks taskData={taskData} setTaskData={setTaskData} />
-                    : IsLoggedIn === false
-                        ? <Navigate to="/login" />
-                        : <LoadingScreen  setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />
-              }
-          />
+              {/* Home (protected) */}
+              <Route
+                  path="/home"
+                  element={
+                      IsLoggedIn === true
+                          ? <Home
+                              setIsLoggedIn={setIsLoggedIn}
+                              userData={userData}
+                              setTaskData={setTaskData}
+                              taskData={taskData}
+                          />
+                          : IsLoggedIn === false
+                              ? <Navigate to="/login" />
+                              : <LoadingScreen
+                                  setIsLoggedIn={setIsLoggedIn}
+                                  setUserData={setUserData}
+                              />
+                  }
+              />
 
-          {/* Root route → Loading check */}
-          <Route
-              path="/"
-              element={<LoadingScreen  setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />}
-          />
-        </Routes>
+              {/* Completed Tasks (protected) */}
+              <Route
+                  path="/completed-tasks"
+                  element={
+                      IsLoggedIn === true
+                          ? <CompletedTasks taskData={taskData} setTaskData={setTaskData} />
+                          : IsLoggedIn === false
+                              ? <Navigate to="/login" />
+                              : <LoadingScreen
+                                  setIsLoggedIn={setIsLoggedIn}
+                                  setUserData={setUserData}
+                              />
+                  }
+              />
+
+              {/* Root route → Redirects appropriately */}
+              <Route
+                  path="/"
+                  element={
+                      IsLoggedIn === true
+                          ? <Navigate to="/home" />
+                          : IsLoggedIn === false
+                              ? <Navigate to="/login" />
+                              : <LoadingScreen
+                                  setIsLoggedIn={setIsLoggedIn}
+                                  setUserData={setUserData}
+                              />
+                  }
+              />
+
+              {/* Fallback for unknown routes */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
       </BrowserRouter>
+
   )
 }
 
