@@ -16,8 +16,13 @@ const LogoutButton = (props) => {
             navigate("/login");
         }
     };
-return(
-    <button onClick={handleLogout} className="ml-[60%] p-3 text-white rounded-full bg-slate-600">Log Out</button>
+return (
+    <button
+        onClick={handleLogout}
+        className="w-full sm:w-auto p-3 my-5 sm:my-4 text-white rounded-full bg-slate-600"
+    >
+        Log Out
+    </button>
 )
 }
 

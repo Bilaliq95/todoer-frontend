@@ -57,7 +57,7 @@ const Login = (props) => {
             style={{backgroundImage: "url('/background.jpg')"}}
             className="h-screen w-full flex items-center justify-center bg-cover bg-center"
         >
-            <div className="w-full max-w-md bg-slate-700 sm:p-6 md:p-10 lg:p-10 ">
+            <div className="w-full max-w-[380px] bg-slate-700 px-4 py-5 sm:p-6 md:p-10 ">
                 <form onSubmit={handleFormSubmit}>
                     <label className="pt-3 text-center form-elements" htmlFor="email">Email</label>
                     <input onChange={handleEmailChange} className=" h-8 text-black form-elements" value={email}
@@ -72,7 +72,7 @@ const Login = (props) => {
                         <button className="p-3 text-white rounded-full bg-slate-600">Login</button>
                     </div>
                 </form>
-                <text className="block text-white">New User?</text>
+                <div className="block text-white">New User?</div>
                 <button onClick={()=>{
                     navigate('/register');
                 }} className="p-3 text-white rounded-full bg-slate-600">Register</button>

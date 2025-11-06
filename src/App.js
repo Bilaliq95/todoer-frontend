@@ -91,6 +91,7 @@ function App() {
                               userData={userData}
                               setTaskData={setTaskData}
                               taskData={taskData}
+                              setUserData={setUserData}
                           />
                           : IsLoggedIn === false
                               ? <Navigate to="/login" />
