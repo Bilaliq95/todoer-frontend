@@ -31,7 +31,7 @@ const CompletedTasks = (props) => {
         <div className=" bg-gray-900 min-h-screen text-white flex flex-col items-center ">
             <button onClick={() => {
                 navigate('/home')
-            }} className="p-3 m-3 text-white rounded-full bg-slate-600 w-full w-auto">Back to Home
+            }} className="p-3 m-3 text-white rounded-full bg-slate-600">Back to Home
             </button>
             <h2 className="font-bold p-5">Your Completed Tasks:</h2>
             {props.taskData.some(t => t.completed === true) ?
