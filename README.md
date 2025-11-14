@@ -1,70 +1,203 @@
-# Getting Started with Create React App
+Todoer Frontend — React + Tailwind (Vercel)
+Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Todoer Frontend is the user interface for the Todoer system.
+Users can register, log in, and manage tasks through a clean, responsive UI.
+The app communicates with the backend microservices via REST APIs secured with JWT authentication.
+Deployed on Vercel for continuous and fast deployment.
 
-## Available Scripts
+Architecture
 
-In the project directory, you can run:
+UI: React
 
-### `npm start`
+Styling: Tailwind CSS
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Routing: React Router
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Data: REST API calls to backend microservices
 
-### `npm test`
+Auth: JWT attached to protected routes; invalid tokens redirect to Login
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Hosting: Vercel (builds triggered from GitHub)
 
-### `npm run build`
+Data Flow
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[Login/Register] → obtain JWT → store auth state
+[Tasks Page] → fetch tasks from backend
+Mutations → POST/PATCH/DELETE → update UI on success
+401 → clear auth and redirect to /login
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Tech Stack
+Layer	Tools
+Framework	React
+Styling	Tailwind CSS
+Routing	React Router
+HTTP	Fetch / Axios
+Deployment	Vercel
+Project Structure
+src/
+  components/
+    Navbar.jsx
+    TaskForm.jsx
+    TaskItem.jsx
+    TaskList.jsx
+    ErrorBanner.jsx
+    Spinner.jsx
+  pages/
+    Login.jsx
+    Register.jsx
+    Tasks.jsx
+  hooks/
+    useAuth.js
+    useTasks.js
+  utils/
+    api.js        # wrapper for API requests
+    storage.js    # helpers for token storage
+  App.js
+  index.js
+tailwind.config.js
+public/
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Routes
+Path	Description
+/login	User login page
+/register	New account creation
+/tasks	Authenticated dashboard for managing tasks
+/	Redirects based on authentication status
+Key Components
 
-### `npm run eject`
+Navbar – Displays navigation and user session info
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+TaskList – Renders user tasks; shows loading and empty states
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+TaskItem – Allows completing, editing, and deleting tasks
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+TaskForm – Adds a new task with validation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+ErrorBanner / Spinner – Shared UI feedback for errors and loading
 
-## Learn More
+State & Data Handling
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Auth – Token saved on login; cleared on logout or expired session
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Tasks – Local state in Tasks page; re-fetch or update optimistically after mutations
 
-### Code Splitting
+Error Handling – Network/API issues shown through ErrorBanner
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Performance – Avoids unnecessary re-renders and repeated fetches
 
-### Analyzing the Bundle Size
+API Contract (Frontend View)
+Method	Endpoint	Description
+POST	/auth/register	Create user; returns { user, accessToken }
+POST	/auth/login	Authenticate; returns { user, accessToken }
+GET	/tasks	Get all tasks (Bearer token required)
+POST	/tasks	Create new task
+PATCH	/tasks/:id	Update existing task
+DELETE	/tasks/:id	Remove a task
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Task Structure
 
-### Making a Progressive Web App
+{
+  id: string,
+  title: string,
+  notes?: string,
+  completed: boolean,
+  createdAt: string,
+  updatedAt: string
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Core Hooks & Functions
+useAuth
 
-### Advanced Configuration
+login(email, password) – Authenticates and stores token
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+register(data) – Registers a new user and logs in
 
-### Deployment
+logout() – Clears auth state and token
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+getToken() – Returns stored JWT for API calls
 
-### `npm run build` fails to minify
+useTasks
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+fetchTasks() – Retrieves all tasks from API
+
+addTask(data) – Creates new task and updates UI
+
+updateTask(id, changes) – Updates existing task
+
+deleteTask(id) – Deletes task and refreshes list
+
+api.js
+
+Adds Authorization: Bearer <token> to requests
+
+Handles 401 responses by clearing auth and redirecting
+
+Environment Variables
+
+Create these in Vercel → Project → Settings → Environment Variables
+
+REACT_APP_API_URL = https://<your-backend-host>
+REACT_APP_BUILD_ENV = production
+
+
+For local development, create a .env file with the same keys.
+All build-time variables must start with REACT_APP_.
+
+Setup (Local Development)
+git clone https://github.com/Bilaliq95/todoer-frontend.git
+cd todoer-frontend
+npm install
+# create .env and set REACT_APP_API_URL
+npm start
+
+
+Then visit http://localhost:3000
+.
+
+Build & Deploy (Vercel)
+
+Connect the repo to Vercel
+
+Build command: npm run build
+
+Output directory: build/
+
+Add environment variables in dashboard
+
+Every push to main triggers automatic deployment
+
+Testing
+
+Smoke tests for components like TaskList and TaskForm
+
+Auth tests: visiting /tasks unauthenticated should redirect to /login
+
+Run tests:
+
+npm test
+
+Known Issues
+
+Missing or incorrect REACT_APP_API_URL causes fetch failures
+
+JWT expiry logs user out (refresh token flow planned)
+
+Basic validation only on forms; can be expanded
+
+Roadmap
+
+Add dark mode
+
+Add drag-and-drop task sorting
+
+Implement optimistic UI updates
+
+Add analytics/error monitoring
+
+Add E2E testing with Playwright
+
+Author
+
+Muhammad Bilal Iqbal
+GitHub: Bilaliq95
